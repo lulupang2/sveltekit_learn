@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+html,
+body {
+	@apply h-full overflow-hidden;
+}
+
+/* seafoam theme */
+@font-face {
+	font-family: 'SUIT-Regular';
+	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2')
+		format('woff2');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Playfair Display';
+	src: url('/fonts/PlayfairDisplay-Italic.ttf');
+	font-display: swap;
+}
+:root [data-theme='modern'] {
+	--theme-font-family-base: 'SUIT-Regular', sans-serif;
+}
