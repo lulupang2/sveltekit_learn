@@ -1,7 +1,8 @@
+import { PUBLIC_BASE_URL } from '$env/static/public';
 import axios from 'axios';
-export const API_URL = `http://${process.env.HOSTNAME}:${process.env.PORT}/api`;
+
 export const api = axios.create({
-	baseURL: API_URL,
+	baseURL: PUBLIC_BASE_URL,
 	headers: {
 		'Content-Type': 'application/json'
 	},
@@ -9,19 +10,19 @@ export const api = axios.create({
 });
 
 export const getPosts = async (pageNum = 0) => {
-	const { data } = await api.get(`${API_URL}/board?pageNum=${pageNum}`);
+	const { data } = await api.get(`/board?pageNum=${pageNum}`);
 
 	return data;
 };
 export const getPost = async (id) => {
-	const { data } = await api.get(`${API_URL}/board/${id}`);
+	const { data } = await api.get(`/board/${id}`);
 
 	return data;
 };
 
 export async function createPost(newPost) {
 	// API 호출을 수행하고 결과를 반환합니다.
-	const { data } = await api.post(`${API_URL}/board`, newPost);
+	const { data } = await api.post(`/board`, newPost);
 
 	return data;
 }
