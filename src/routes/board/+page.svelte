@@ -1,15 +1,9 @@
 <script>
 	import { getPosts } from '$lib/api';
+	import { formatDate } from '$lib/utils';
 	import { Paginator } from '@skeletonlabs/skeleton';
 	import { createQuery } from '@tanstack/svelte-query';
-	import dayjs from 'dayjs';
-	import timezone from 'dayjs/plugin/timezone';
-	import utc from 'dayjs/plugin/utc';
-	export let data;
-	const nowDate = dayjs().format('YYYY-MM-DD');
-	dayjs.extend(utc);
-	dayjs.extend(timezone);
-	dayjs.tz.setDefault('Asia/Seoul');
+
 	$: settings = {
 		page: 0,
 		limit: 5,
@@ -22,8 +16,7 @@
 		queryKey: ['board', settings.page + 1],
 		queryFn: () => getPosts(settings.page + 1),
 		keepPreviousData: true,
-		initialDataUpdatedAt: 0,
-		initialData: data
+		initialDataUpdatedAt: 0
 	});
 
 	function onPageChange(e) {
@@ -68,9 +61,7 @@
 						<td> {post.title} </td>
 						<td class="table-cell-fit text-center"> {post.author} </td>
 						<td class="table-cell-fit text-center">
-							{nowDate === dayjs(post.createdAt).format('YYYY-MM-DD')
-								? dayjs.tz(post.createdAt).format('HH:mm')
-								: dayjs.tz(post.createdAt).format('MM-DD')}
+							{formatDate(post.createdAt)}
 						</td>
 						<td class="table-cell-fit text-center"> {post.views} </td>
 					</tr>
