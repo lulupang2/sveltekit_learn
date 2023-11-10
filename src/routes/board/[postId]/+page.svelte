@@ -63,9 +63,9 @@
 	{/if}
 	<div class="post-btn-container flex justify-between pt-8">
 		<a class="btn variant-filled" href="/board">목록</a>
-		<button on:click={() => modal.trigger(deleteModal)} type="button" class="btn variant-filled"
+		<!-- <button on:click={() => modal.trigger(deleteModal)} type="button" class="btn variant-filled"
 			>삭제</button
-		>
+		> -->
 	</div>
 	{#if $modal[0]}
 		<div />
