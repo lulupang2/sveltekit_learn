@@ -1,3 +1,3 @@
 # 배포
 
-LINK : [배포][http://152.69.230.5:3000/]
+LINK : http://rocky.jisung.pro:3000
