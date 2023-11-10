@@ -13,6 +13,7 @@
 		queryFn: () => getPost(postId),
 		retry: 2
 	});
+	//TODO: 삭제 모달 작업
 	const mutation = (passwd) =>
 		createMutation({
 			mutationFn: deletePost(postId, passwd),
@@ -25,14 +26,7 @@
 				console.log('에러', error);
 			}
 		});
-	const deleteModal = {
-		type: 'prompt',
-		title: '게시글 삭제',
-		body: '비밀번호를 입력해주세요',
-		value: '',
-		valueAttr: { type: 'password', required: true },
-		response: (r) => mutation(r)
-	};
+
 	const failToast = {
 		message: '비밀번호가 일치하지 않습니다.',
 		background: 'variant-filled-warning',
@@ -73,6 +67,9 @@
 			>삭제</button
 		>
 	</div>
+	{#if $modal[0]}
+		<div />
+	{/if}
 </main>
 
 <style lang="scss">
