@@ -21,14 +21,14 @@
 			<AppBar>
 				<svelte:fragment slot="lead">
 					<strong class="text-xl uppercase">
-						<!-- {#if process.env.NODE_ENV === 'production'}
+						{#if process.env.NODE_ENV === 'production'}
 							<span class="text-red-500">[Production]</span>
 						{/if}
 						{#if process.env.NODE_ENV === 'local'}
 							<span class="text-purple-500">[Local]</span>
 
 							<span class="text-green-500">[Development]</span>
-						{/if} -->
+						{/if}
 					</strong>
 				</svelte:fragment>
 				<svelte:fragment slot="trail">
