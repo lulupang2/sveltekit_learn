@@ -2,7 +2,7 @@ import { PUBLIC_BASE_URL, PUBLIC_LOCAL_URL } from '$env/static/public';
 import axios from 'axios';
 const baseURL =
 	process.env.NODE_ENV === `production`
-		? `http://rocky.jisung.pro:9999/api`
+		? `http://152.69.230.5:9999/api`
 		: process.env.NODE_ENV === `development`
 		? PUBLIC_LOCAL_URL
 		: PUBLIC_BASE_URL;
