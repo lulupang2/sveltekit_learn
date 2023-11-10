@@ -1,3 +1,3 @@
 # 배포
 
-LINK : http://rocky.jisung.pro:3000
+LINK : https://main--marvelous-travesseiro-40ad39.netlify.app/
