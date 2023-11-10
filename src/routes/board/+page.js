@@ -1,5 +1,6 @@
 import { getPosts } from '$lib/api.js';
-export const load = async ({ parent, fetch }) => {
+export const prerender = false;
+export const load = async ({ parent }) => {
 	const { queryClient } = await parent();
 
 	// You need to use the SvelteKit fetch function here

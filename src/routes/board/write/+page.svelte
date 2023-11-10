@@ -1,50 +1,50 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { createPost } from '$lib/api';
 	import Tiptap from '$lib/components/Editor/Tiptap.svelte';
+	import { getToastStore } from '@skeletonlabs/skeleton';
 	import { createMutation, useQueryClient } from '@tanstack/svelte-query';
-	import { Editor } from '@tiptap/core';
-	import StarterKit from '@tiptap/starter-kit';
-	import { onDestroy, onMount } from 'svelte';
 
 	let editor;
-	let element;
+	let imgFile;
 	const client = useQueryClient();
+	const toast = getToastStore();
+	const successToast = {
+		message: '게시글이 등록되었습니다.',
+		background: 'variant-filled-success',
+		timeout: 3000,
+		position: 't'
+	};
 
-	onMount(() => {
-		editor = new Editor({
-			element: element,
-			extensions: [StarterKit],
-			content: '<p>Hello World! 🌎️</p>',
-			editorProps: {
-				attributes: {
-					class: 'editor textarea border border-primary-100 p-3 outline-none '
-				}
-			},
-			onTransaction: () => {
-				// force re-render so `editor.isActive` works as expected
-				editor = editor;
-			}
-		});
-		console.log('editor', editor);
-	});
-
-	onDestroy(() => {
-		if (editor) {
-			editor.destroy();
-		}
-	});
 	let form = { author: '', password: '', title: '', content: '' };
+	const onImageUpload = (e) => {
+		let image = e.target.files[0];
+		let reader = new FileReader();
+		reader.readAsDataURL(image);
+		reader.onload = (e) => {
+			editor.commands.setImage({ src: e.target.result });
+			imgFile.value = '';
+		};
+	};
 	const addPost = async (form) => {
+		if (!form.author || !form.password || !form.title || !form.content) {
+			alert('빈칸을 모두 채워주세요.');
+			console.log('form', form);
+			return;
+		}
 		const res = await createPost(form);
-		console.log('res', res);
+		return res;
 	};
 	const mutation = createMutation({
 		mutationFn: addPost,
 		mutationKey: 'createPost',
 		onSuccess: (data) => {
 			client.invalidateQueries({
-				queryKey: ['board', data]
+				queryKey: ['post', data.id]
 			});
+			toast.trigger(successToast);
+			console.log('dd', data);
+			goto(`/board/${data.id}`);
 		},
 		onError: (error) => {
 			console.log('error', error);
@@ -57,8 +57,8 @@
 		on:submit={(e) => {
 			e.preventDefault();
 			e.stopPropagation();
-			form.content = editor.getHTML(); // 에디터의 내용을 form.content에 설정합니다.
-			$mutation.mutate(form); // form 객체를 mutate 함수에 전달합니다.
+			form.content = editor.getHTML();
+			$mutation.mutate(form);
 		}}
 	>
 		<div class="-mx-3 md:flex mb-6">
@@ -67,7 +67,7 @@
 					class="input appearance-none outline-none block w-full py-3 px-4 cursor-pointer focus:outline-none"
 					title="author"
 					type="text"
-					autocomplete="username"
+					autocomplete="off"
 					placeholder="작성자"
 					bind:value={form.author}
 				/>
@@ -77,7 +77,7 @@
 					class="input appearance-none outline-none block w-full py-3 px-4 cursor-pointer focus:outline-none"
 					title="password"
 					type="password"
-					autocomplete="current-password"
+					autocomplete="off"
 					placeholder="비밀번호"
 					bind:value={form.password}
 				/>
@@ -93,8 +93,19 @@
 			/>
 		</div>
 
-		<Tiptap element {editor} />
-		<div bind:this={element} />
-		<button type="submit">Submit</button>
+		<Tiptap bind:editor />
+		<div class="flex justify-between pt-8">
+			<input
+				type="file"
+				name="imgFile"
+				id="imgFile"
+				class="hidden"
+				accept="image/*"
+				bind:this={imgFile}
+				on:change={onImageUpload}
+			/>
+			<label for="imgFile" class="btn variant-filled w-24"> 이미지 </label>
+			<button type="submit" class="btn variant-filled w-24">저장</button>
+		</div>
 	</form>
 </div>

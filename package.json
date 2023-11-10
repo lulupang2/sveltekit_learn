@@ -3,7 +3,8 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "NODE_ENV=development vite dev",
+		"prod": "NODE_ENV=production vite dev",
 		"build": "vite build",
 		"prepare": "svelte-kit sync",
 		"preview": "vite preview",
@@ -48,14 +49,14 @@
 		"@tiptap/core": "^2.1.12",
 		"@tiptap/extension-bubble-menu": "^2.1.12",
 		"@tiptap/extension-floating-menu": "^2.1.12",
+		"@tiptap/extension-image": "^2.1.12",
+		"@tiptap/extension-placeholder": "^2.1.12",
 		"@tiptap/pm": "^2.1.12",
 		"@tiptap/starter-kit": "^2.1.12",
 		"axios": "^1.6.0",
-		"clsx": "^2.0.0",
 		"dayjs": "^1.11.10",
 		"lodash": "^4.17.21",
 		"remixicon": "^3.5.0",
-		"svelte-query": "^0.0.1-alpha1",
 		"svelte-tiptap": "^1.1.2"
 	}
 }

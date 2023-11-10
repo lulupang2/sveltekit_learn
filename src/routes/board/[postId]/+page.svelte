@@ -1,38 +1,78 @@
 <script>
-	import { getPost } from '$lib/api.js';
+	import { goto } from '$app/navigation';
+	import { deletePost, getPost } from '$lib/api.js';
+	import Comments from '$lib/components/Comments/Comments.svelte';
 	import { postDate } from '$lib/utils';
-	import { createQuery } from '@tanstack/svelte-query';
+	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+	import { createMutation, createQuery } from '@tanstack/svelte-query';
+
 	export let data;
 	const { postId } = data;
-	const post = createQuery({
+	const results = createQuery({
 		queryKey: ['post', postId],
-		queryFn: () => getPost(postId)
+		queryFn: () => getPost(postId),
+		retry: 2
 	});
+	const mutation = (passwd) =>
+		createMutation({
+			mutationFn: deletePost(postId, passwd),
+			mutationKey: 'deletePost',
+			onSuccess: () => {
+				goto('/board');
+			},
+			onError: (error) => {
+				toast.trigger(failToast);
+				console.log('에러', error);
+			}
+		});
+	const deleteModal = {
+		type: 'prompt',
+		title: '게시글 삭제',
+		body: '비밀번호를 입력해주세요',
+		value: '',
+		valueAttr: { type: 'password', required: true },
+		response: (r) => mutation(r)
+	};
+	const failToast = {
+		message: '비밀번호가 일치하지 않습니다.',
+		background: 'variant-filled-warning',
+		timeout: 3000,
+		position: 't'
+	};
+	const toast = getToastStore();
+	const modal = getModalStore();
 </script>
 
 <main class="post p-24 mx-auto">
-	{#if !postId || $post.isLoading}
+	{#if !postId || $results.isLoading}
 		<span>Loading...</span>
 	{/if}
-	{#if $post.error}
-		<span>Error: {$post.error.message}</span>
+	{#if $results.error}
+		<span>Error: {goto('/board')}</span>
 	{/if}
-	{#if $post.isSuccess}
+	{#if $results.isSuccess}
 		<div class="post-header pt-8">
-			<h1>{$post.data.title}</h1>
+			<h1>{$results.data.post.title}</h1>
 			<div class="post-info pt-4 flex gap-2">
-				<span class="post-info-author">{$post.data.author}</span>
-				<span class="post-info-date flex-1">{postDate($post.data.createdAt)}</span>
-				<span class="post-info-views mr-40">조회 {$post.data.views}</span>
+				<span class="post-info-author">{$results.data.post.author}</span>
+				<span class="post-info-date flex-1">{postDate($results.data.post.createdAt)}</span>
+				<span class="post-info-views mr-40">조회 {$results.data.post.views}</span>
 			</div>
 		</div>
 		<div class="content pt-12">
-			{@html $post.data.content}
+			{@html $results.data.post.content}
 		</div>
 		<div class="comments pt-8">
-			<h2>댓글</h2>
+			<span>댓글 ({$results.data.commentSize})</span>
+			<Comments comments={$results.data.comments} />
 		</div>
 	{/if}
+	<div class="post-btn-container flex justify-between pt-8">
+		<a class="btn variant-filled" href="/board">목록</a>
+		<button on:click={() => modal.trigger(deleteModal)} type="button" class="btn variant-filled"
+			>삭제</button
+		>
+	</div>
 </main>
 
 <style lang="scss">

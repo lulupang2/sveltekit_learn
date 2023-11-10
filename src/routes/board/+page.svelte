@@ -8,10 +8,10 @@
 		page: 0,
 		limit: 5,
 		offset: 0,
-		size: 30,
+		size: size,
 		amounts: []
 	};
-
+	$: size = $query?.data.totalPost ?? 0;
 	$: query = createQuery({
 		queryKey: ['board', settings.page + 1],
 		queryFn: () => getPosts(settings.page + 1),
