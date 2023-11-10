@@ -1,4 +1,5 @@
 <script>
+	import { Comments } from '$lib/components/Comments/Comments.svelte';
 	import { formatDate } from '$lib/utils';
 
 	export let comments;
@@ -11,7 +12,7 @@
 	{#if comments.length === 0}
 		<p>댓글이 없습니다.</p>
 	{:else}
-		{#each comments as comment, i}
+		{#each comments as comment}
 			<ul class=" divide-gray-200 dark:divide-gray-700">
 				<li class="pb-3">
 					<div class="flex items-center space-x-4">

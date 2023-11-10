@@ -42,7 +42,7 @@
 		}
 	});
 	function onPasteHandler(editor) {
-		return (event, view, slice) => {
+		return (event) => {
 			const item = event.clipboardData?.items[0];
 
 			if (item?.type.indexOf('image') !== 0) {

@@ -1,12 +1,5 @@
 <script>
-	import {
-		AppBar,
-		AppShell,
-		Modal,
-		Toast,
-		getToastStore,
-		initializeStores
-	} from '@skeletonlabs/skeleton';
+	import { AppBar, AppShell, Modal, Toast, initializeStores } from '@skeletonlabs/skeleton';
 	import { QueryClientProvider } from '@tanstack/svelte-query';
 	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
 	import '../app.postcss';

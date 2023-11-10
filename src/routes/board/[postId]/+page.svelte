@@ -1,10 +1,10 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { deletePost, getPost } from '$lib/api.js';
+	import { getPost } from '$lib/api.js';
 	import Comments from '$lib/components/Comments/Comments.svelte';
 	import { postDate } from '$lib/utils';
 	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-	import { createMutation, createQuery } from '@tanstack/svelte-query';
+	import { createQuery } from '@tanstack/svelte-query';
 
 	export let data;
 	const { postId } = data;
@@ -14,26 +14,26 @@
 		retry: 2
 	});
 	//TODO: 삭제 모달 작업
-	const mutation = (passwd) =>
-		createMutation({
-			mutationFn: deletePost(postId, passwd),
-			mutationKey: 'deletePost',
-			onSuccess: () => {
-				goto('/board');
-			},
-			onError: (error) => {
-				toast.trigger(failToast);
-				console.log('에러', error);
-			}
-		});
+	// const mutation = (passwd) =>
+	// 	createMutation({
+	// 		mutationFn: deletePost(postId, passwd),
+	// 		mutationKey: 'deletePost',
+	// 		onSuccess: () => {
+	// 			goto('/board');
+	// 		},
+	// 		onError: (error) => {
+	// 			toast.trigger(failToast);
+	// 			console.log('에러', error);
+	// 		}
+	// 	});
 
-	const failToast = {
-		message: '비밀번호가 일치하지 않습니다.',
-		background: 'variant-filled-warning',
-		timeout: 3000,
-		position: 't'
-	};
-	const toast = getToastStore();
+	// const failToast = {
+	// 	message: '비밀번호가 일치하지 않습니다.',
+	// 	background: 'variant-filled-warning',
+	// 	timeout: 3000,
+	// 	position: 't'
+	// };
+	// const toast = getToastStore();
 	const modal = getModalStore();
 </script>
 

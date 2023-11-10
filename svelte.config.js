@@ -1,5 +1,6 @@
 import { vitePreprocess } from '@sveltejs/kit/vite';
-import adapter from 'svelte-adapter-bun';
+// import adapter from 'svelte-adapter-bun';
+import adapter from '@sveltejs/adapter-netlify';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -10,6 +11,7 @@ const config = {
 		adapter: adapter({
 			// default options are shown
 			out: 'build',
+			fallback: `200.html`,
 			precompress: false,
 			envPrefix: '',
 			polyfill: true

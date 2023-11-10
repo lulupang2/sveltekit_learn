@@ -43,7 +43,7 @@
 			{#if $query.isPending}
 				{#each { length: 5 } as _, i}
 					<tr>
-						<td class="skeleton" colspan="5" />
+						<td class="skeleton" colspan="5" id={(_, i)} />
 					</tr>
 				{/each}
 			{/if}
