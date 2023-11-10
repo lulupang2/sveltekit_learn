@@ -1,4 +1,5 @@
 <!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
 
 <div class="container h-full mx-auto flex justify-center items-center">
 	<div class="space-y-10 text-center flex flex-col items-center">
