@@ -58,7 +58,10 @@
 				{#each $query.data.item as post}
 					<tr on:click={() => (window.location = `board/${post.id}`)}>
 						<td class="table-cell-fit text-center"> {post.id} </td>
-						<td> {post.title} </td>
+						<td>
+							<span class="text-base">{post.title}</span>
+							<span class="text-xs ml-1 text-primary-50">({post.commentCount})</span>
+						</td>
 						<td class="table-cell-fit text-center"> {post.author} </td>
 						<td class="table-cell-fit text-center">
 							{formatDate(post.createdAt)}

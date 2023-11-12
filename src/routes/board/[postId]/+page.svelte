@@ -5,6 +5,7 @@
 	import { postDate } from '$lib/utils';
 	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
 	import { createQuery } from '@tanstack/svelte-query';
+	import Comment from './Comment.svelte';
 
 	export let data;
 	const { postId } = data;
@@ -59,6 +60,9 @@
 		<div class="comments pt-8">
 			<span>댓글 ({$results.data.commentSize})</span>
 			<Comments comments={$results.data.comments} />
+		</div>
+		<div class="comment pt-8 border-t-2">
+			<Comment {postId} />
 		</div>
 	{/if}
 	<div class="post-btn-container flex justify-between pt-8">

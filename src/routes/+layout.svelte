@@ -23,7 +23,7 @@
 </svelte:head>
 <QueryClientProvider client={data.queryClient}>
 	<Modal />
-	<Toast />
+	<Toast position="t" />
 	<AppShell>
 		<svelte:fragment slot="header">
 			<!-- App Bar -->

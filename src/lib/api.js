@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import { PUBLIC_LOCAL_URL } from '$env/static/public';
 import axios from 'axios';
 
@@ -16,16 +17,12 @@ api.interceptors.response.use(
 	},
 	(error) => {
 		if (error.response) {
-			// The request was made and the server responded with a status code
-			// that falls out of the range of 2xx
 			console.log(error.response.data);
 			console.log(error.response.status);
 			console.log(error.response.headers);
 		} else if (error.request) {
-			// The request was made but no response was received
 			console.log(error.request);
 		} else {
-			// Something happened in setting up the request that triggered an Error
 			console.log('Error', error.message);
 		}
 		return Promise.reject(error);
@@ -51,6 +48,12 @@ export async function createPost(newPost) {
 
 export async function deletePost(id, passwd) {
 	const { data } = await api.delete(`/board/${id}`, passwd);
+
+	return data;
+}
+
+export async function createComment(postId, body) {
+	const { data } = await api.post(`/board/${postId}/comment`, body);
 
 	return data;
 }
