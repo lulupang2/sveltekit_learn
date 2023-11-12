@@ -1,17 +1,26 @@
 <script>
-	import { AppBar, AppShell, Modal, Toast, initializeStores } from '@skeletonlabs/skeleton';
+	import { dev } from '$app/environment';
+	import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
+	import {
+		AppBar,
+		AppShell,
+		Modal,
+		Toast,
+		initializeStores,
+		storePopup
+	} from '@skeletonlabs/skeleton';
 	import { QueryClientProvider } from '@tanstack/svelte-query';
 	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
 	import '../app.postcss';
-	// Floating UI for Popups
-	import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
-	import { storePopup } from '@skeletonlabs/skeleton';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 	export let data;
 	initializeStores();
 </script>
 
 <!-- App Shell -->
+<svelte:head>
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+</svelte:head>
 <QueryClientProvider client={data.queryClient}>
 	<Modal />
 	<Toast />
@@ -21,13 +30,10 @@
 			<AppBar>
 				<svelte:fragment slot="lead">
 					<strong class="text-xl uppercase">
-						{#if process.env.NODE_ENV === 'production'}
-							<span class="text-red-500">[Production]</span>
-						{/if}
-						{#if process.env.NODE_ENV === 'local'}
-							<span class="text-purple-500">[Local]</span>
-
-							<span class="text-green-500">[Development]</span>
+						{#if dev && 'production'}
+							<span class="text-red-500">[Development]</span>
+						{:else}
+							<span class="text-yellow-500">[Production]</span>
 						{/if}
 					</strong>
 				</svelte:fragment>
