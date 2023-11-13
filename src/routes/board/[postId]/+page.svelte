@@ -1,46 +1,68 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { getPost } from '$lib/api.js';
+	import { deletePost, getPost } from '$lib/api.js';
 	import Comments from '$lib/components/Comments/Comments.svelte';
 	import { postDate } from '$lib/utils';
 	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-	import { createQuery } from '@tanstack/svelte-query';
+	import { createMutation, createQuery } from '@tanstack/svelte-query';
 	import Comment from './Comment.svelte';
+	import Loading from '$lib/components/Loading/Loading.svelte';
 
 	export let data;
 	const { postId } = data;
+	let password;
 	const results = createQuery({
 		queryKey: ['post', postId],
 		queryFn: () => getPost(postId),
 		retry: 2
 	});
 	//TODO: 삭제 모달 작업
-	// const mutation = (passwd) =>
-	// 	createMutation({
-	// 		mutationFn: deletePost(postId, passwd),
-	// 		mutationKey: 'deletePost',
-	// 		onSuccess: () => {
-	// 			goto('/board');
-	// 		},
-	// 		onError: (error) => {
-	// 			toast.trigger(failToast);
-	// 			console.log('에러', error);
-	// 		}
-	// 	});
+	const dropPost = () => {
+		const res = deletePost(postId, password);
+		return res;
+	};
+	const mutation = createMutation({
+		mutationFn: dropPost,
+		mutationKey: 'deletePost',
+		onSuccess: () => {
+			goto('/board');
+		},
+		onSettled: () => {
+			toast.trigger({
+				message: '게시글이 삭제되었습니다.',
+				background: 'variant-filled-success',
+				timeout: 3000
+			});
+		},
+		onError: (error) => {
+			toast.trigger({
+				message: `${error.response.data.message}`,
+				background: 'variant-filled-warning',
+				timeout: 3000,
+				position: 't'
+			});
+			console.log('에러', error);
+		}
+	});
 
-	// const failToast = {
-	// 	message: '비밀번호가 일치하지 않습니다.',
-	// 	background: 'variant-filled-warning',
-	// 	timeout: 3000,
-	// 	position: 't'
-	// };
-	// const toast = getToastStore();
+	const toast = getToastStore();
 	const modal = getModalStore();
+
+	const deletePostModal = {
+		type: 'confirm',
+		// Data
+		title: '게시글 삭제',
+		body: '게시글을 삭제하시겠습니까?',
+		response: () => {
+			console.log(password);
+			$mutation.mutate();
+		}
+	};
 </script>
 
 <main class="post p-24 mx-auto">
 	{#if !postId || $results.isLoading}
-		<span>Loading...</span>
+		<Loading />
 	{/if}
 	{#if $results.error}
 		<span>Error: {goto('/board')}</span>
@@ -67,9 +89,22 @@
 	{/if}
 	<div class="post-btn-container flex justify-between pt-8">
 		<a class="btn variant-filled" href="/board">목록</a>
-		<!-- <button on:click={() => modal.trigger(deleteModal)} type="button" class="btn variant-filled"
-			>삭제</button
-		> -->
+		<div>
+			<div class="input-group input-group-divider grid-cols-[1fr_auto]">
+				<input
+					on:change={(e) => (password = e.target.value)}
+					type="password"
+					class="input pl-2"
+					placeholder="비밀번호"
+				/>
+
+				<button
+					on:click={() => modal.trigger(deletePostModal)}
+					type="button"
+					class="post-delete-btn btn variant-filled">삭제</button
+				>
+			</div>
+		</div>
 	</div>
 	{#if $modal[0]}
 		<div />
@@ -89,6 +124,11 @@
 					margin: 0 10px 0 6px;
 					vertical-align: -2px;
 				}
+			}
+		}
+		&-delete {
+			&-btn {
+				padding: 0.5rem 2rem;
 			}
 		}
 	}

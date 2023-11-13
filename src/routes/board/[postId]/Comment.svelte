@@ -77,7 +77,6 @@
 		&-submit {
 			&-btn {
 				padding: 0.5rem 2rem;
-				display: grid;
 			}
 		}
 	}

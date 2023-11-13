@@ -12,11 +12,20 @@
 	import { QueryClientProvider } from '@tanstack/svelte-query';
 	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
 	import '../app.postcss';
+	import { navigating } from '$app/stores';
+	import Loading from '$lib/components/Loading/Loading.svelte';
+	import { fade } from 'svelte/transition';
+
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 	export let data;
 	initializeStores();
 </script>
 
+{#if $navigating}
+	<div out:fade={{ delay: 500 }}>
+		<Loading />
+	</div>
+{/if}
 <!-- App Shell -->
 <svelte:head>
 	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
