@@ -29,7 +29,7 @@
 		},
 		onError: (error) => {
 			commentToast.trigger(failToast);
-			console.log('error', error);
+			console.error('error', error);
 		}
 	});
 	const sucssesToast = {
@@ -42,7 +42,6 @@
 		background: 'variant-filled-warning',
 		timeout: 5000
 	};
-	console.log('postId', postId);
 </script>
 
 <form on:submit={$mutation.mutate(form)}>

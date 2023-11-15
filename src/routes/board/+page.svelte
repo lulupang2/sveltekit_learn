@@ -21,11 +21,11 @@
 	});
 
 	function onPageChange(e) {
-		console.log('event:page', e.detail);
+		// console.log('event:page', e.detail);
 	}
 
 	function onAmountChange(e) {
-		console.log('event:amount', e.detail);
+		// console.log('event:amount', e.detail);
 	}
 </script>
 

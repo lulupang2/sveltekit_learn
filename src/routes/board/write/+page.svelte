@@ -29,7 +29,6 @@
 	const addPost = async (form) => {
 		if (!form.author || !form.password || !form.title || !form.content) {
 			alert('빈칸을 모두 채워주세요.');
-			console.log('form', form);
 			return;
 		}
 		const res = await createPost(form);
@@ -43,11 +42,10 @@
 				queryKey: ['post', data.id]
 			});
 			toast.trigger(successToast);
-			console.log('dd', data);
 			goto(`/board/${data.id}`);
 		},
 		onError: (error) => {
-			console.log('error', error);
+			console.error('error', error);
 		}
 	});
 </script>

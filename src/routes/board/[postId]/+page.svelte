@@ -41,7 +41,7 @@
 				timeout: 3000,
 				position: 't'
 			});
-			console.log('에러', error);
+			console.error('create comment error', error);
 		}
 	});
 
@@ -54,7 +54,6 @@
 		title: '게시글 삭제',
 		body: '게시글을 삭제하시겠습니까?',
 		response: () => {
-			console.log(password);
 			$mutation.mutate();
 		}
 	};

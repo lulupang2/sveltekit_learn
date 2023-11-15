@@ -19,6 +19,12 @@
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 	export let data;
 	initializeStores();
+	if (!dev) {
+		console = window.console || {};
+		console.log = function () {};
+		console.warn = function () {};
+		console.error = function () {};
+	}
 </script>
 
 {#if $navigating}

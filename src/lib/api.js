@@ -1,5 +1,5 @@
 import { dev } from '$app/environment';
-import { PUBLIC_LOCAL_URL } from '$env/static/public';
+import { PUBLIC_LOCAL_URL, PUBLIC_BASE_URL } from '$env/static/public';
 import axios from 'axios';
 
 const baseURL = dev ? PUBLIC_LOCAL_URL : `https://152.69.230.5:9999/api`;
@@ -17,13 +17,13 @@ api.interceptors.response.use(
 	},
 	(error) => {
 		if (error.response) {
-			console.log(error.response.data);
-			console.log(error.response.status);
-			console.log(error.response.headers);
+			console.error(error.response.data);
+			console.error(error.response.status);
+			console.error(error.response.headers);
 		} else if (error.request) {
-			console.log(error.request);
+			console.error(error.request);
 		} else {
-			console.log('Error', error.message);
+			console.error('Error', error.message);
 		}
 		return Promise.reject(error);
 	}
