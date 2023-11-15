@@ -61,7 +61,7 @@
 </script>
 
 <main class="post p-24 mx-auto">
-	{#if !postId || $results.isLoading}
+	{#if $results.isLoading}
 		<Loading />
 	{/if}
 	{#if $results.error}
@@ -90,20 +90,23 @@
 	<div class="post-btn-container flex justify-between pt-8">
 		<a class="btn variant-filled" href="/board">목록</a>
 		<div>
-			<div class="input-group input-group-divider grid-cols-[1fr_auto]">
-				<input
-					on:change={(e) => (password = e.target.value)}
-					type="password"
-					class="input pl-2"
-					placeholder="비밀번호"
-				/>
+			<form>
+				<div class="input-group input-group-divider grid-cols-[1fr_auto]">
+					<input
+						on:change={(e) => (password = e.target.value)}
+						type="password"
+						class="input pl-2"
+						placeholder="비밀번호"
+						autocomplete="off"
+					/>
 
-				<button
-					on:click={() => modal.trigger(deletePostModal)}
-					type="button"
-					class="post-delete-btn btn variant-filled">삭제</button
-				>
-			</div>
+					<button
+						on:click={() => modal.trigger(deletePostModal)}
+						type="button"
+						class="post-delete-btn btn variant-filled">삭제</button
+					>
+				</div>
+			</form>
 		</div>
 	</div>
 	{#if $modal[0]}

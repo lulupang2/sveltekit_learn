@@ -11,23 +11,23 @@ export const api = axios.create({
 	timeout: 3000
 });
 
-// api.interceptors.response.use(
-// 	(response) => {
-// 		return response;
-// 	},
-// 	(error) => {
-// 		if (error.response) {
-// 			console.log(error.response.data);
-// 			console.log(error.response.status);
-// 			console.log(error.response.headers);
-// 		} else if (error.request) {
-// 			console.log(error.request);
-// 		} else {
-// 			console.log('Error', error.message);
-// 		}
-// 		return Promise.reject(error);
-// 	}
-// );
+api.interceptors.response.use(
+	(response) => {
+		return response;
+	},
+	(error) => {
+		if (error.response) {
+			console.log(error.response.data);
+			console.log(error.response.status);
+			console.log(error.response.headers);
+		} else if (error.request) {
+			console.log(error.request);
+		} else {
+			console.log('Error', error.message);
+		}
+		return Promise.reject(error);
+	}
+);
 
 export const getPosts = async (pageNum = 0) => {
 	const { data } = await api.get(`/board?pageNum=${pageNum}`);

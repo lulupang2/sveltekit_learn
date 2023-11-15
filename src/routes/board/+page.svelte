@@ -1,5 +1,6 @@
 <script>
 	import { getPosts } from '$lib/api';
+	import Loading from '$lib/components/Loading/Loading.svelte';
 	import { formatDate } from '$lib/utils';
 	import { Paginator } from '@skeletonlabs/skeleton';
 	import { createQuery } from '@tanstack/svelte-query';
@@ -40,8 +41,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#if $query.isPending}
+			{#if $query.isPending || $query.isLoading}
 				{#each { length: 5 } as _, i}
+					<Loading />
 					<tr>
 						<td class="skeleton" colspan="5" id={(_, i)} />
 					</tr>

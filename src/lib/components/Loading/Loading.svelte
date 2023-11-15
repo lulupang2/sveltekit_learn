@@ -1,27 +1,7 @@
-<script>
-	import { onMount } from 'svelte';
-	import { tweened } from 'svelte/motion';
-	import { cubicOut } from 'svelte/easing';
-	import { afterNavigate } from '$app/navigation';
-
-	const progress = tweened(0, {
-		duration: 3500,
-		easing: cubicOut
-	});
-
-	onMount(() => {
-		progress.set(0.7);
-	});
-
-	afterNavigate(() => progress.set(1, { duration: 1000 }));
-</script>
-
-<div class="fixed inset-0 h-2">
-	<div class="progress bg-blue-500 h-full" style={`--width: ${$progress * 100}%`} />
+<div
+	class="fixed bg-black opacity-10 h-full w-full grid place-items-center right-1/2 bottom-1/2 transform translate-x-1/2 translate-y-1/2"
+>
+	<div
+		class="border-t-transparent border-solid animate-spin rounded-full border-secondary-700 border-8 h-32 w-32"
+	/>
 </div>
-
-<style>
-	.progress {
-		width: var(--width);
-	}
-</style>
