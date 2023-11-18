@@ -5,8 +5,9 @@
 	import { postDate } from '$lib/utils';
 	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
 	import { createMutation, createQuery } from '@tanstack/svelte-query';
-	import Comment from './Comment.svelte';
 	import Loading from '$lib/components/Loading/Loading.svelte';
+	import Comment from '$lib/components/Comments/Comment.svelte';
+	import PostSkeleton from './PostSkeleton.svelte';
 
 	export let data;
 	const { postId } = data;
@@ -59,9 +60,12 @@
 	};
 </script>
 
+{#if $results.isLoading || $results.isIdle || $results.isFetching}
+	<Loading />
+{/if}
 <main class="post p-24 mx-auto">
-	{#if $results.isLoading}
-		<Loading />
+	{#if $results.isLoading || $results.isIdle || $results.isFetching}
+		<PostSkeleton />
 	{/if}
 	{#if $results.error}
 		<span>Error: {goto('/board')}</span>

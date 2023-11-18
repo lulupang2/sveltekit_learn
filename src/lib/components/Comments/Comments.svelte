@@ -3,8 +3,7 @@
 	import { tick } from 'svelte';
 	import { writable } from 'svelte/store';
 	import Comments from './Comments.svelte';
-	import Comment from '../../../routes/board/[postId]/Comment.svelte';
-
+	import Comment from './Comment.svelte';
 	export let comments;
 	export let parentAuthor;
 	export const selected = writable(2);

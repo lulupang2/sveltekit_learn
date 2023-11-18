@@ -11,28 +11,34 @@ export const api = axios.create({
 	timeout: 3000
 });
 
-api.interceptors.response.use(
-	(response) => {
-		return response;
-	},
-	(error) => {
-		if (error.response) {
-			console.error(error.response.data);
-			console.error(error.response.status);
-			console.error(error.response.headers);
-		} else if (error.request) {
-			console.error(error.request);
-		} else {
-			console.error('Error', error.message);
-		}
-		return Promise.reject(error);
+// api.interceptors.response.use(
+// 	(response) => {
+// 		return response;
+// 	},
+// 	(error) => {
+// 		if (error.response) {
+// 			console.error(error.response.data);
+// 			console.error(error.response.status);
+// 			console.error(error.response.headers);
+// 		} else if (error.request) {
+// 			console.error(error.request);
+// 		} else {
+// 			console.error('Error', error.message);
+// 		}
+// 		return Promise.reject(error);
+// 	}
+// );
+
+export const getPosts = async (pageNum = 0, keyword, type) => {
+	if (keyword) {
+		const { data } = await api.get(`/board/search?type=${type}?search=${keyword}`);
+
+		return data;
+	} else {
+		const { data } = await api.get(`/board?pageNum=${pageNum}`);
+
+		return data;
 	}
-);
-
-export const getPosts = async (pageNum = 0) => {
-	const { data } = await api.get(`/board?pageNum=${pageNum}`);
-
-	return data;
 };
 export const getPost = async (id) => {
 	const { data } = await api.get(`/board/${id}`);
@@ -48,6 +54,12 @@ export async function createPost(newPost) {
 
 export async function deletePost(id, password) {
 	const { data } = await api.delete(`/board/${id}`, { data: { password } });
+
+	return data;
+}
+
+export async function searchPosts(type, query) {
+	const { data } = await api.get(`/board/search?type=${type}?query=${query}`);
 
 	return data;
 }

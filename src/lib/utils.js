@@ -15,3 +15,18 @@ export function formatDate(date) {
 export function postDate(date) {
 	return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
 }
+
+export function historyBackHandler() {
+	addEventListener('popstate', (event) => {
+		if (event.state && this.enabled) {
+			const url = new URL(location.href);
+			const info = this.parse(url);
+			if (info) {
+				this._navigate(info, event.state['sveltekit:scroll'], []);
+			} else {
+				// eslint-disable-next-line
+				location.href = location.href; // nosonar
+			}
+		}
+	});
+}

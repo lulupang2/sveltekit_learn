@@ -15,16 +15,22 @@
 	import { navigating } from '$app/stores';
 	import Loading from '$lib/components/Loading/Loading.svelte';
 	import { fade } from 'svelte/transition';
+	import { historyBackHandler } from '$lib/utils';
+	import { onMount } from 'svelte';
 
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+
 	export let data;
 	initializeStores();
-	if (!dev) {
-		console = console || {};
-		console.log = function () {};
-		console.warn = function () {};
-		console.error = function () {};
-	}
+
+	onMount(() => {
+		if (!dev) {
+			console = window.console || {};
+			console.log = function () {};
+			console.warn = function () {};
+			console.error = function () {};
+		}
+	});
 </script>
 
 {#if $navigating}
