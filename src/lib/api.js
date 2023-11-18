@@ -2,7 +2,7 @@ import { dev } from '$app/environment';
 import { PUBLIC_LOCAL_URL, PUBLIC_BASE_URL } from '$env/static/public';
 import axios from 'axios';
 
-const baseURL = dev ? PUBLIC_LOCAL_URL : `https://152.69.230.5:9999/api`;
+const baseURL = dev ? PUBLIC_LOCAL_URL : `http://152.69.230.5:9999/api`;
 export const api = axios.create({
 	baseURL,
 	headers: {

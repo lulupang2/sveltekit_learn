@@ -28,7 +28,7 @@
 </script>
 
 {#if $navigating}
-	<div out:fade={{ delay: 500 }}>
+	<div class="relative z-50" out:fade={{ delay: 200 }}>
 		<Loading />
 	</div>
 {/if}
