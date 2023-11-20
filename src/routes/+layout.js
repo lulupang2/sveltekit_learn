@@ -4,7 +4,11 @@ import { QueryClient } from '@tanstack/svelte-query';
 export const load = async () => {
 	const queryClient = new QueryClient({
 		defaultOptions: {
-			queries: {}
+			queries: {
+				enabled: browser,
+				staleTime: 60 * 1000,
+				suspense: true
+			}
 		}
 	});
 

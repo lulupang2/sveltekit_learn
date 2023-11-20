@@ -10,8 +10,8 @@
 
 	$: typeSelect = 'all';
 	$: searchKeyword = '';
-	$: currntPage = data.page;
-	$: size = $query?.data?.totalPost || 0;
+	// $: currntPage = Number(data.page) + 1 ?? data.page + 1;
+	$: size = $query?.data?.totalPost;
 
 	$: query = createQuery({
 		queryKey: ['board', settings.page + 1, data.type, data.search],
@@ -21,26 +21,26 @@
 	});
 
 	$: settings = {
-		page: currntPage - 1,
+		page: 0,
 		limit: 5,
 		offset: 5,
 		size,
 		amounts: []
 	};
 	function onPageChange(e) {
-		goto(`/board?page=${e.detail + 1}&type=${typeSelect}&search=${searchKeyword}`);
+		data.search
+			? goto(`/board?page=${e.detail + 1}&type=${data.type}&search=${data.type}`)
+			: goto(`/board?page=${e.detail + 1}`);
 	}
 
 	function onAmountChange(e) {
-		goto(`/board?page=${e.detail + 1}&type=${typeSelect}&search=${searchKeyword}`);
-		// data.search
-		// 	? goto(`/board?page=${e.detail + 1}&type=${typeSelect}&search=${searchKeyword}`)
-		// 	: goto(`/board?page=${e.detail + 1}`);
+		data.search
+			? goto(`/board?page=${e.detail + 1}&type=${data.type}&search=${data.type}`)
+			: goto(`/board?page=${e.detail + 1}`);
 	}
 	const onSearchChange = (e) => (searchKeyword = e.target.value);
 	const searchHandler = async () => {
-		console.log('searchHandler', searchKeyword);
-		await goto(`/board?page=${1}&type=${typeSelect}&search=${searchKeyword}`);
+		goto(`/board?page=${1}&type=${typeSelect}&search=${searchKeyword}`);
 	};
 </script>
 
@@ -112,6 +112,7 @@
 			<Paginator
 				bind:settings
 				showNumerals
+				maxNumerals={5}
 				showFirstLastButtons
 				controlVariant={'variant-filled-surface'}
 				justify={'justify-center'}
@@ -135,7 +136,7 @@
 				<option value="author">작성자</option>
 			</select>
 			<input
-				on:input={(e) => (searchKeyword = e.target.value)}
+				on:input={onSearchChange}
 				on:keydown={(e) => e.key === 'Enter' && searchHandler()}
 				class="bg-transparent border-0 ring-0 pl-4"
 				title="Input (search)"

@@ -40,8 +40,13 @@ api.interceptors.response.use(
 
 export const getPosts = async (pageNum, type, search) => {
 	try {
-		const { data } = await api.get(`/board?pageNum=${pageNum}&type=${type}&search=${search}`);
-		return data;
+		if (type && search) {
+			const { data } = await api.get(`/board?pageNum=${pageNum}&type=${type}&search=${search}`);
+			return data;
+		} else {
+			const { data } = await api.get(`/board?pageNum=${pageNum}`);
+			return data;
+		}
 	} catch (error) {
 		console.error(error);
 	}
