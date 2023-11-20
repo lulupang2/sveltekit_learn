@@ -28,9 +28,10 @@
 		onSuccess: () => {
 			goto('/board');
 		},
-		onSettled: () => {
+		onSettled: (data) => {
+			console.log('create comment settled', data);
 			toast.trigger({
-				message: '게시글이 삭제되었습니다.',
+				message: data.response.data.message,
 				background: 'variant-filled-success',
 				timeout: 3000
 			});

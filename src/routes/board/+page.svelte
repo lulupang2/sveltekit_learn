@@ -5,40 +5,51 @@
 	import { formatDate } from '$lib/utils';
 	import { Paginator } from '@skeletonlabs/skeleton';
 	import { createQuery } from '@tanstack/svelte-query';
+
 	export let data;
-	const { page } = data;
+
+	$: typeSelect = 'all';
+	$: searchKeyword = '';
+	$: currntPage = data.page;
+	$: size = $query?.data?.totalPost || 0;
+
+	$: query = createQuery({
+		queryKey: ['board', settings.page + 1, data.type, data.search],
+		queryFn: () => getPosts(settings.page + 1, data.type, data.search),
+		keepPreviousData: true,
+		initialData: data.initialData
+	});
+
 	$: settings = {
-		page: page - 1 ?? 0,
+		page: currntPage - 1,
 		limit: 5,
 		offset: 5,
 		size,
 		amounts: []
 	};
-	$: size = $query?.data?.totalPost;
-	$: query = createQuery({
-		queryKey: ['board', settings.page + 1],
-		queryFn: () => getPosts(settings.page + 1),
-		keepPreviousData: true,
-		initialDataUpdatedAt: 0
-	});
-	let searchKeyword = '';
-
 	function onPageChange(e) {
-		goto(`/board?page=${e.detail + 1}`);
+		goto(`/board?page=${e.detail + 1}&type=${typeSelect}&search=${searchKeyword}`);
 	}
 
 	function onAmountChange(e) {
-		goto(`/board?page=${e.detail + 1}`);
+		goto(`/board?page=${e.detail + 1}&type=${typeSelect}&search=${searchKeyword}`);
+		// data.search
+		// 	? goto(`/board?page=${e.detail + 1}&type=${typeSelect}&search=${searchKeyword}`)
+		// 	: goto(`/board?page=${e.detail + 1}`);
 	}
-	console.debug('aa', $query);
+	const onSearchChange = (e) => (searchKeyword = e.target.value);
+	const searchHandler = async () => {
+		console.log('searchHandler', searchKeyword);
+		await goto(`/board?page=${1}&type=${typeSelect}&search=${searchKeyword}`);
+	};
 </script>
 
 <main class="relative z-0">
-	{#if $query.isPending || $query.isLoading}
+	{#if $query.isLoading}
 		<Loading />
 	{/if}
+
 	<div class="table-container h-full pt-10 my-8 px-24 mx-auto flex flex-col gap-2 -z-1">
-		<legend>{typeof data.page}: {data.page}</legend>
 		<table class="table table-interactive">
 			<thead>
 				<tr>
@@ -71,7 +82,13 @@
 						</tr>
 					{/each}
 				{/if}
-
+				{#if $query.error}
+					<tr>
+						<td class="text-center" colspan="5">
+							<div class=" w-full grid place-content-center h-48">검색 결과가 없습니다.</div>
+						</td>
+					</tr>
+				{/if}
 				{#if $query.isSuccess}
 					{#each $query.data.item as post}
 						<tr on:click={() => (window.location = `board/${post.id}`)}>
@@ -94,8 +111,9 @@
 		<div class="pagination-container pt-8">
 			<Paginator
 				bind:settings
-				maxNumerals={5}
 				showNumerals
+				showFirstLastButtons
+				controlVariant={'variant-filled-surface'}
 				justify={'justify-center'}
 				on:page={onPageChange}
 				on:amount={onAmountChange}
@@ -106,56 +124,26 @@
 				data-sveltekit-preload-data="hover">글쓰기</a
 			>
 		</div>
-		<form
-			class="input-group input-group-divider grid-cols-[1fr_5fr_0.5fr] rounded-container-token mt-8 my-16"
+
+		<div
+			class="input-group input-group-divider grid-cols-[0.5fr_5fr_0.5fr] rounded-container-token mt-8 my-16"
 		>
-			<select class="select">
-				<option value="1">전체</option>
-				<option value="2">제목</option>
-				<option value="3">내용</option>
-				<option value="4">작성자</option>
-				<option value="5">댓글</option>
+			<select class="select" bind:value={typeSelect} disabled>
+				<option value="all">전체</option>
+				<option value="title">제목</option>
+				<option value="content">내용</option>
+				<option value="author">작성자</option>
 			</select>
 			<input
-				bind:value={searchKeyword}
-				class="bg-transparent border-0 ring-0"
+				on:input={(e) => (searchKeyword = e.target.value)}
+				on:keydown={(e) => e.key === 'Enter' && searchHandler()}
+				class="bg-transparent border-0 ring-0 pl-4"
 				title="Input (search)"
 				type="search"
 			/>
-			<button class="variant-filled-surface place-items-center"
+			<button class="variant-filled-surface place-items-center" on:click={searchHandler}
 				><span class="w-full">검색</span></button
 			>
-		</form>
+		</div>
 	</div>
 </main>
-
-<style lang="scss">
-	.skeleton {
-		background: #e1e1e1;
-		border-radius: 4px;
-		height: 50px;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.skeleton::before {
-		content: '';
-		display: block;
-		position: absolute;
-		left: -150px;
-		top: 0;
-		height: 100%;
-		width: 150px;
-		background: linear-gradient(to right, transparent 0%, #e8e8e8 50%, transparent 100%);
-		animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-	}
-
-	@keyframes load {
-		from {
-			left: -150px;
-		}
-		to {
-			left: 100%;
-		}
-	}
-</style>
