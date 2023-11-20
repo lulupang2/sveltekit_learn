@@ -28,15 +28,11 @@
 		amounts: []
 	};
 	function onPageChange(e) {
-		data.search
-			? goto(`/board?page=${e.detail + 1}&type=${data.type}&search=${data.type}`)
-			: goto(`/board?page=${e.detail + 1}`);
+		goto(`/board?page=${e.detail + 1}&type=${data.type}&search=${data.search}`);
 	}
 
 	function onAmountChange(e) {
-		data.search
-			? goto(`/board?page=${e.detail + 1}&type=${data.type}&search=${data.type}`)
-			: goto(`/board?page=${e.detail + 1}`);
+		goto(`/board?page=${e.detail + 1}&type=${data.type}&search=${data.search}`);
 	}
 	const onSearchChange = (e) => (searchKeyword = e.target.value);
 	const searchHandler = async () => {
