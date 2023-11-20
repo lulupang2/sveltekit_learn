@@ -60,7 +60,7 @@
 				</svelte:fragment>
 				<svelte:fragment slot="trail">
 					<a class="btn btn-sm variant-ghost-surface" href="/"> 홈 </a>
-					<a class="btn btn-sm variant-ghost-surface" href="/board"> 게시판 </a>
+					<a class="btn btn-sm variant-ghost-surface" href="/board?page=1"> 게시판 </a>
 					<a class="btn btn-sm variant-ghost-surface" href="/chat"> 채팅 </a>
 				</svelte:fragment>
 			</AppBar>
