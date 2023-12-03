@@ -63,6 +63,7 @@
 					<a class="btn btn-sm variant-ghost-surface" href="/board?page=1&type=all&search=">
 						게시판
 					</a>
+					<a class="btn btn-sm variant-ghost-surface" href="/canvas"> 캔버스 </a>
 					<a class="btn btn-sm variant-ghost-surface" href="/chat"> 채팅 </a>
 				</svelte:fragment>
 			</AppBar>
